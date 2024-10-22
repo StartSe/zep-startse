@@ -10,8 +10,10 @@ services:
       - "8000:8000"
     volumes:
       - ./zep.yaml:/app/zep.yaml
-    environment:
-      - ZEP_CONFIG_FILE=zep.yaml
+    env_file:
+      - .env 
+    # environment:
+    #   - ZEP_CONFIG_FILE=zep.yaml
     networks:
       - zep-network
     depends_on:
