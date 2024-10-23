@@ -1,4 +1,4 @@
-FROM golang:1.22.5-bookworm AS BUILD
+FROM golang:1.22.5-bookworm AS build
 
 RUN mkdir /app
 WORKDIR /app
@@ -8,7 +8,7 @@ RUN go mod download
 WORKDIR /app
 RUN make -f Makefile.ce build
 
-FROM debian:bookworm-slim AS RUNTIME
+FROM debian:bookworm-slim AS runtime
 RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY --from=BUILD /app/out/bin/zep /app/
