@@ -1,6 +1,6 @@
 module github.com/getzep/zep
 
-go 1.23
+go 1.21.5
 
 require (
 	dario.cat/mergo v1.0.1
