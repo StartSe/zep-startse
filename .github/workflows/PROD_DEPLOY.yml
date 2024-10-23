@@ -12,24 +12,25 @@ jobs:
     steps:
       - name: Checkout Source
         uses: actions/checkout@v4
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Setup GO
+        uses: actions/setup-go@v5
         with:
-          node-version: 18
+          go-version: ^1.13.1
+      - run: go mod download
       - name: Create .env file
         env:
           SECRETS: ${{ toJson(secrets) }}
         run: .github/scripts/create-envs.sh
       - name: Generate Deployment Package
-        run: zip -r zep-momory-service-build.zip .
+        run: zip -r zep-dev-build.zip .
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v20
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: 'zep-momory-service'
-          environment_name: 'zep-momory-service-env'
+          application_name: 'zep-dev'
+          environment_name: 'zep-dev-env'
           version_label: ${{ github.sha }}
           region: us-east-2
-          deployment_package: zep-momory-service-build.zip
+          deployment_package: zep-dev-build.zip
           use_existing_version_if_available: true
