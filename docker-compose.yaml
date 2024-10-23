@@ -3,17 +3,15 @@ name: zep-ce
 services:
   zep:
     image: zepai/zep:latest
-    #    build:
-    #      context: .
-    #      dockerfile: Dockerfile.ce
+    build:
+      context: .
+      dockerfile: Dockerfile.ce
     ports:
       - "8000:8000"
     volumes:
       - ./zep.yaml:/app/zep.yaml
     env_file:
-      - .env 
-    # environment:
-    #   - ZEP_CONFIG_FILE=zep.yaml
+      - .env
     networks:
       - zep-network
     depends_on:
@@ -27,12 +25,12 @@ services:
     restart: on-failure
     shm_size: "128mb" # Increase this if vacuuming fails with a "no space left on device" error
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     networks:
       - zep-network
     healthcheck:
-      test: ["CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres"]
+      test: ["CMD", "pg_isready", "-q", "-d", "${POSTGRES_USER}", "-U", "${POSTGRES_USER}"]
       interval: 5s
       timeout: 5s
       retries: 5
